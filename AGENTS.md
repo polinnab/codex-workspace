@@ -1,9 +1,29 @@
-# Codex Workspace
+# codex-workspace
 
-This repository is a local Codex wrapper workspace for projects. It organizes repo-local workflows, repo-local subagents, and nested project directories without relying on any global-machine configuration.
+This repository is a local Codex wrapper workspace for projects.
 
-Use `.agents/skills/` for repo-local workflow skills. Before doing task-specific work, choose the workflow skill that best matches the request.
+## Purpose
 
-Use `.codex/agents/` for repo-local custom subagent definitions such as planning or implementation roles.
+This workspace stores reusable Codex workflows and repo-local agent configuration that can be applied to projects inside `projects/`.
 
-Use `projects/` for nested project repositories or local sample apps. Project-specific commands, tooling, and conventions belong inside each real project, not in this wrapper.
+It is not a global Codex installation and should not contain machine-wide configuration.
+
+## Structure
+
+- `.agents/skills/` — reusable repo-local workflow skills
+- `.codex/agents/` — repo-local custom subagents
+- `projects/` — local sample apps or real project repositories worked on inside this workspace
+
+## Working rules
+
+- Before doing task-specific work, choose and follow the appropriate workflow skill:
+  - `feature-workflow`
+  - `bugfix-workflow`
+  - `request-workflow`
+- Keep wrapper-level instructions generic and reusable.
+- Keep project-specific commands, architecture rules, and conventions inside each real project, not in this wrapper.
+
+## Scope
+
+This wrapper defines process and reusable guidance only.
+Real implementation details belong to the actual project being edited.

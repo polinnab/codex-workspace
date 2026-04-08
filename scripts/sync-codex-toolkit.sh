@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+APP_NAME="${1:-}"
+if [ -z "$APP_NAME" ]; then
+  echo "Usage: ./scripts/sync-codex-toolkit.sh <app-folder>"
+  exit 1
+fi
+
+TARGET_DIR="$ROOT/projects/$APP_NAME"
+
+if [ ! -d "$TARGET_DIR" ]; then
+  echo "Error: $TARGET_DIR does not exist"
+  exit 1
+fi
+
+echo "Syncing Codex toolkit into: $TARGET_DIR"
+
+# Ensure dirs exist
+mkdir -p "$TARGET_DIR/.agents/skills"
+mkdir -p "$TARGET_DIR/.codex/agents"
+
+# --- AGENTS.md ---
+cp "$ROOT/AGENTS.md" "$TARGET_DIR/AGENTS.md"
+
+# --- Skills ---
+rsync -av --delete "$ROOT/.agents/skills/" "$TARGET_DIR/.agents/skills/"
+
+# --- Subagents ---
+rsync -av --delete "$ROOT/.codex/agents/" "$TARGET_DIR/.codex/agents/"
+
+echo "✅ Sync complete"
