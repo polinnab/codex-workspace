@@ -5,6 +5,8 @@
 - Use $feature-workflow when you want actual implementation with plan approval, validation, and
   commit-message selection.
 - Use $request-workflow when you want ...
+- Use $workspace-evolution when you want to improve `codex-workspace` itself: wrapper scripts,
+  repo-local skills, sync behavior, and broader reusable tooling ideas.
 
 ## Store and read session context SKILL
 

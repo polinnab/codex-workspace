@@ -23,6 +23,9 @@ mkdir -p "$TARGET_DIR/.agents/skills"
 mkdir -p "$TARGET_DIR/.codex/agents"
 
 # --- Skills ---
-rsync -av --delete "$ROOT/.agents/skills/" "$TARGET_DIR/.agents/skills/"
+# Keep wrapper-only skills in codex-workspace and out of synced app repos.
+rsync -av --delete \
+  --exclude 'workspace-evolution/' \
+  "$ROOT/.agents/skills/" "$TARGET_DIR/.agents/skills/"
 
 echo "✅ Sync complete"

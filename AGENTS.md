@@ -19,6 +19,7 @@ It is not a global Codex installation and should not contain machine-wide config
   - `feature-workflow`
   - `bugfix-workflow`
   - `request-workflow`
+  - `workspace-evolution` for improving this wrapper workspace itself
 - Keep wrapper-level instructions generic and reusable.
 - Keep project-specific commands, architecture rules, and conventions inside each real project, not in this wrapper.
 
