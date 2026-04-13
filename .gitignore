@@ -1,3 +1,6 @@
 .vscode/
 /projects/*
 !/projects/.gitkeep
+.codex/plans/
+.codex/context/
+.codex/notes/

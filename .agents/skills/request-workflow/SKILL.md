@@ -1,6 +1,6 @@
 ---
 name: request-workflow
-description: Use this skill for general development requests, small feature work, refactors, UI changes, fixes, or task continuation from saved context. It can start from a fresh user prompt or from a saved task context markdown file path provided by the user.
+description: Use this skill for general development requests, small feature work, refactors, UI changes, fixes, or task continuation from saved context or an approved saved plan. It can start from a fresh user prompt or from a saved markdown artifact path provided by the user.
 ---
 
 # Request Workflow
@@ -14,8 +14,8 @@ It supports two starting points:
 1. **Fresh request**  
    The user describes what they want in the current prompt.
 
-2. **Saved context continuation**  
-   The user provides a relative path to a markdown file with saved context from a previous session.  
+2. **Saved artifact continuation**  
+   The user provides a relative path to a markdown file with saved context or an approved plan from a previous session.  
    The agent must read that file first, analyze it, and use it as the starting context for the task.
 
 The workflow ensures the agent:
@@ -37,15 +37,15 @@ The workflow ensures the agent:
 
 The user may provide one of these:
 
-### A. Saved context path
+### A. Saved artifact path
 
 A relative path to a markdown file, for example:
 
-`context/some-task.md`
+`.codex/context/some-task.md`
 
 or
 
-`.agents/context/some-task/overview.md`
+`.codex/plans/some-task.md`
 
 When such a path is provided, you must:
 
@@ -67,7 +67,7 @@ When no context file path is provided, work directly from the prompt.
    Do not jump into implementation until the task is understood well enough.
 
 2. **Use saved context when provided**
-   If the user provided a relative path to saved context, read it before planning or asking questions.
+   If the user provided a relative path to saved context or a saved approved plan, read it before planning or asking questions.
 
 3. **Ask questions only if needed**
    Ask follow-up questions only when missing information would likely cause wrong implementation, rework, or risky assumptions.
@@ -114,17 +114,24 @@ When no context file path is provided, work directly from the prompt.
 Check whether the user provided:
 
 - a saved context file path
+- a saved approved plan path
 - a fresh request
 - both
 
-If a context file path is present:
+If a saved context file path is present:
 
 - read the file first
 - treat it as the main source of truth unless the user overrides something
 
+If a saved approved plan path is present:
+
+- read the file first
+- treat it as approved implementation direction unless the user overrides scope
+- if the user changes scope materially, return to planning and ask for approval again
+
 If both are present:
 
-- combine saved context with current prompt updates
+- combine the saved artifact with current prompt updates
 
 ---
 
@@ -138,7 +145,7 @@ Understand:
 - missing information
 - affected areas/files
 
-If using saved context, identify:
+If using a saved artifact, identify:
 
 - completed vs unfinished work
 - prior decisions that must be respected
@@ -184,6 +191,8 @@ Keep it short and practical.
 
 End with:
 **Approve this plan?**
+
+Skip this approval step only when the starting input is an explicitly approved saved plan and the user has not changed scope.
 
 ---
 

@@ -13,6 +13,16 @@ It is not a global Codex installation and should not contain machine-wide config
 - `.agents/skills/` — reusable repo-local workflow skills
 - `projects/` — local sample apps or real project repositories worked on inside this workspace
 
+## Local Codex Artifacts
+
+When the toolkit is synced into a project, it may create project-local working artifacts under `.codex/`.
+
+- `.codex/plans/` — approved implementation plans saved for a future `feature-workflow` or `request-workflow` session
+- `.codex/context/` — saved session handoff context for later continuation
+- `.codex/notes/` — local task notes used while work is in progress
+
+These artifacts are wrapper-managed local workspace files. They should be ignored by git in both the wrapper and synced project repos unless a project explicitly chooses a different policy.
+
 ## Working rules
 
 - Before doing task-specific work, choose and follow the appropriate workflow skill:

@@ -242,16 +242,16 @@ How to verify it works
 
 After providing the final investigation output and the implementation plan for the next agent, the agent MUST ask the user:
 
-**"Add this plan into appropriate skill dir?"**
+**"Save this approved plan into .codex/plans/<task-name>.md for the next feature-workflow or request-workflow session?"**
 
 ### If the user answers "yes"
 
 - Create a separate file containing the implementation plan
-- Place it into the appropriate skill-related directory agreed for handoff materials
+- Place it into `.codex/plans/<task-name>.md`
 - The file must contain only the structured implementation plan and any necessary context for the next agent
 - After creating the file, clearly tell the user:
   - where the file was created
-  - which next workflow should use it (`feature-workflow` or `bugfix-workflow`)
+  - which next workflow should use it (`feature-workflow` or `request-workflow`)
 
 ### If the user answers "no"
 
@@ -262,7 +262,7 @@ After providing the final investigation output and the implementation plan for t
 ### Important Rules
 
 - The agent MUST NOT create the file before asking
-- The agent MUST NOT guess the target workflow if it is still unclear
+- The agent MUST ask for or infer a short kebab-case `task-name` before saving
 - The created file is a handoff artifact only, not implementation
 - The file must be plain, structured, and ready for the next agent to read
 
@@ -273,11 +273,10 @@ After providing the final investigation output and the implementation plan for t
 - Prefer clarity over cleverness
 - Always guide the user toward a decision
 
-- Suggested target directories:
-  - `feature-workflow/plans/`
-  - `bugfix-workflow/plans/`
+- Suggested target directory:
+  - `.codex/plans/`
 - Suggested filename format:
-  - `investigation-plan-<short-task-name>.md`
+  - `<short-task-name>.md`
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: "session-handoff"
-description: "Use when the user wants to preserve the current task state for a later session or another agent by drafting a structured handoff summary and, after approval, saving it to context/<project-name>/<task-name>.md."
+description: "Use when the user wants to preserve the current task state for a later session or another agent by drafting a structured handoff summary and, after approval, saving it to .codex/context/<task-name>.md."
 ---
 
 # Session Handoff
@@ -13,7 +13,7 @@ The goal is to produce a concise, practical Markdown summary of the current task
 
 Save handoffs to:
 
-`context/<project-name>/<task-name>.md`
+`.codex/context/<task-name>.md`
 
 The bundled helper script at `scripts/save-context.sh` can copy a prepared Markdown file into that location.
 
@@ -22,7 +22,7 @@ The bundled helper script at `scripts/save-context.sh` can copy a prepared Markd
 - Do not implement production code as part of this skill.
 - Do not modify repository files except the target handoff file.
 - Do not save or overwrite the handoff file without explicit user approval.
-- Do not guess `project-name` or `task-name` if they are unclear.
+- Do not guess `task-name` if it is unclear.
 - Do summarize the task state clearly and concretely.
 - Do preserve decisions, constraints, blockers, and next steps.
 - Do keep the handoff useful for a new session with minimal additional context.
@@ -31,14 +31,12 @@ The bundled helper script at `scripts/save-context.sh` can copy a prepared Markd
 
 Before saving, identify:
 
-- `project-name`
 - `task-name`
 
-If either value is missing or ambiguous, ask the user before offering to save.
+If it is missing or ambiguous, ask the user before offering to save.
 
 Guidance:
 
-- `project-name`: usually the repo or project directory name
 - `task-name`: short kebab-case identifier such as `fix-auth-redirect` or `investigate-build-failure`
 
 ## Workflow
@@ -47,7 +45,6 @@ Guidance:
 
 Determine:
 
-- project name
 - task name
 - current stage
 
@@ -94,13 +91,13 @@ Show the full draft to the user before writing any file.
 
 Then ask exactly:
 
-`Save this handoff into context/<project-name>/<task-name>.md?`
+`Save this handoff into .codex/context/<task-name>.md?`
 
 ### 5. Save Only After Approval
 
 If the user says yes:
 
-- create or replace `context/<project-name>/<task-name>.md`
+- create or replace `.codex/context/<task-name>.md`
 - save the prepared Markdown
 - confirm the saved path
 
@@ -118,7 +115,7 @@ Use this structure exactly:
 
 ## Project
 
-<project-name>
+<current project directory name or repo name>
 
 ## Task
 

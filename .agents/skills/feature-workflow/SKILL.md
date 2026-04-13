@@ -7,6 +7,12 @@ description: "Use when the user explicitly wants a gated delivery workflow for f
 
 For every new feature, bugfix, or implementation request, follow this workflow exactly.
 
+### Saved plan input
+
+- If the user provides a saved approved plan path such as `.codex/plans/<task-name>.md`, read it first.
+- Treat that file as the approved implementation plan unless the user explicitly changes scope.
+- If the user changes scope, return to clarification and plan approval before coding.
+
 ### 1. Intake
 
 - Start by analyzing the request.
@@ -42,10 +48,9 @@ For every new feature, bugfix, or implementation request, follow this workflow e
 - If the user does not approve the plan, revise the plan.
 - Ask for approval again.
 - Repeat until approval is given.
-- When a feature is expected to continue in a later session, store the feature context in a task note so the next session has a stable handoff.
-- Store task notes as separate Markdown files in `docs/task-notes/`.
-- Default behavior: keep task notes committed to git while the task is active, so the handoff is stable across sessions.
-- After the task is fully done, remove the task note or move any important long-term decisions into permanent documentation.
+- When a feature is expected to continue in a later session, store local working notes in `.codex/notes/<task-name>.md` so the next session has a stable handoff.
+- Keep `.codex/notes/` ignored by git by default.
+- Move any important long-term decisions into permanent project documentation when they should be shared.
 
 Task note template:
 
