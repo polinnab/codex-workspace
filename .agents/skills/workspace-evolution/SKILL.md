@@ -1,6 +1,6 @@
 ---
 name: workspace-evolution
-description: Use this skill when working on codex-workspace itself: adding or updating wrapper scripts, creating or refining repo-local skills, improving toolkit sync behavior, and implementing broader ideas that make the workspace more reusable and universal.
+description: "Use this skill when working on codex-workspace itself: adding or updating wrapper scripts, creating or refining repo-local skills, improving toolkit sync behavior, and implementing broader ideas that make the workspace more reusable and universal."
 ---
 
 # Workspace Evolution
