@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Workflow"
+  short_description: "Structured delivery workflow for feature work"
+  default_prompt: "Use $feature-workflow to run a gated feature implementation flow with clarification, plan approval, validation, and commit-message selection."

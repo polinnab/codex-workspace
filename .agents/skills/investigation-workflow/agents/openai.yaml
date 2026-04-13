@@ -1,0 +1,4 @@
+interface:
+  display_name: "Investigation Workflow"
+  short_description: "Structured investigation before implementation"
+  default_prompt: "Use $investigation-workflow to analyze the problem, clarify unknowns, compare solution options, and produce an implementation handoff without changing the repo."

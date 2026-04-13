@@ -11,7 +11,6 @@ It is not a global Codex installation and should not contain machine-wide config
 ## Structure
 
 - `.agents/skills/` — reusable repo-local workflow skills
-- `.codex/agents/` — repo-local custom subagents
 - `projects/` — local sample apps or real project repositories worked on inside this workspace
 
 ## Working rules

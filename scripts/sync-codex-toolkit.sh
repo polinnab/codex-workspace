@@ -22,13 +22,7 @@ echo "Syncing Codex toolkit into: $TARGET_DIR"
 mkdir -p "$TARGET_DIR/.agents/skills"
 mkdir -p "$TARGET_DIR/.codex/agents"
 
-# --- AGENTS.md ---
-cp "$ROOT/AGENTS.md" "$TARGET_DIR/AGENTS.md"
-
 # --- Skills ---
 rsync -av --delete "$ROOT/.agents/skills/" "$TARGET_DIR/.agents/skills/"
-
-# --- Subagents ---
-rsync -av --delete "$ROOT/.codex/agents/" "$TARGET_DIR/.codex/agents/"
 
 echo "✅ Sync complete"
