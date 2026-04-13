@@ -35,8 +35,16 @@ For every new feature, bugfix, or implementation request, follow this workflow e
   - scope
   - files/modules likely to change
   - implementation approach
-  - validation approach
+  - validation plan
   - risks / assumptions
+
+- The validation plan must define the command(s) to run after implementation.
+- Use this discovery order:
+  - explicit user instruction or approved saved plan
+  - project `AGENTS.md`, `README`, or project docs
+  - repo-defined entrypoints such as `validate`, `check`, `test`, `lint`, `typecheck`, `build`
+  - clear tool-native commands inferred from the repo if no explicit entrypoint exists
+- Prefer the smallest relevant validation set that gives confidence for the changed scope.
 
 - After presenting the plan, explicitly ask for approval.
 - Do not start implementation until the user approves the plan.
@@ -108,15 +116,12 @@ Task note template:
 
 ### 6. Validation (MANDATORY)
 
-- After implementation, run:
-
-```bash
-yarn validate
-```
-
+- After implementation, run the validation command(s) defined in the approved plan.
+- Prefer project entrypoints over framework guesses.
 - If validation fails, fix the issues and run validation again.
-- Repeat until yarn validate passes or until blocked by an external issue that cannot be resolved within the task.
+- Repeat until validation passes or until blocked by an external issue that cannot be resolved within the task.
 - If validation fails because of pre-existing or unrelated repository issues, stop and report them first before continuing.
+- If no reliable validation path exists, state that explicitly and report any lighter relevant checks that were run instead.
 - If blocked, clearly explain the blocker and what remains unresolved.
 
 ### 7. Handoff for Human Review
@@ -136,7 +141,7 @@ If the user requests changes after review, return to the clarification step:
 - update the plan
 - get approval
 - implement
-- run yarn validate again
+- run the planned validation command(s) again
 
 ### 9. Completion
 
@@ -174,7 +179,7 @@ End with:
 # Use this structure:
 
 1. What changed
-2. Validation result
+2. Validation result with exact command(s) run
 3. What to verify in browser
 
 # For completion
@@ -189,7 +194,7 @@ After user approval, provide:
 - Do not skip the clarification step for non-trivial work.
 - Do not skip the clarification gate even when there are no open questions; explicitly state that the task is clear, then move to planning.
 - Do not skip plan approval.
-- Do not skip yarn validate.
+- Do not skip validation.
 - Do not treat silence as approval.
 - Do not continue coding after new ambiguity appears; ask first.
 - Do not continue past unrelated validation failures without reporting them first.

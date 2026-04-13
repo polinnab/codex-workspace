@@ -30,6 +30,11 @@ These artifacts are wrapper-managed local workspace files. They should be ignore
   - `bugfix-workflow`
   - `request-workflow`
   - `workspace-evolution` for improving this wrapper workspace itself
+- Keep validation in delivery workflows, but keep it repo-native:
+  - prefer explicit project validation commands from user instructions, project `AGENTS.md`, README, or docs
+  - otherwise prefer repo entrypoints like `validate`, `check`, `test`, `lint`, `typecheck`, or `build`
+  - only infer tool-native commands when the repo does not define an explicit validation path
+  - run the smallest relevant validation set for the changed scope and report the exact commands used
 - Keep wrapper-level instructions generic and reusable.
 - Keep project-specific commands, architecture rules, and conventions inside each real project, not in this wrapper.
 

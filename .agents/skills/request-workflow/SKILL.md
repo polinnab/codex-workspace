@@ -24,7 +24,8 @@ The workflow ensures the agent:
 - asks follow-up questions only when needed
 - creates a short implementation plan before implementation
 - gets user approval before coding
-- validates the result with `yarn validate`
+- defines a stack-appropriate validation plan
+- validates the result with the best repo-native command(s) available
 - fixes validation issues if possible
 - finishes with a short handoff for browser testing
 - proposes or uses an approved commit message
@@ -81,30 +82,39 @@ When no context file path is provided, work directly from the prompt.
 6. **Always ask for approval before implementation**
    Do not start implementation until the user approves the plan.
 
-7. **After implementation always run validation**
-   Run:
+7. **During planning define the validation approach**
+   The plan must name the validation command(s) to run after implementation.
+   Use this discovery order:
 
-   ```bash
-   yarn validate
+   ```text
+   1. User instruction or approved saved plan
+   2. Project AGENTS.md, README, or project docs
+   3. Repo-defined entrypoints such as validate, check, test, lint, typecheck, build
+   4. Clear tool-native commands inferred from the repo when no explicit entrypoint exists
    ```
 
-8. Fix validation issues when possible
-   If yarn validate fails, analyze errors and fix them before finishing, when reasonably possible.
+   Prefer the smallest relevant validation set for the changed scope.
 
-9. Finish with a short final handoff
+8. **After implementation always run validation**
+   Run the planned validation command(s).
+
+9. Fix validation issues when possible
+   If validation fails, analyze errors and fix them before finishing, when reasonably possible.
+
+10. Finish with a short final handoff
    Keep it brief and practical:
 
 - what was done
 - what the user should check in browser
 
-10. Commit only after user approval
+11. Commit only after user approval
     If the user confirms everything is good:
 
 - propose a commit message, or
 - ask for the user’s preferred message
 - once the message is approved, create the local git commit
 
-11. Never push
+12. Never push
     Do not push to remote under any circumstances.
 
 ## Workflow
@@ -186,6 +196,7 @@ Create a concise plan including:
 - what will be changed
 - key areas/files involved
 - any important behavior changes
+- validation plan with the command(s) to run and why they fit the repo
 
 Keep it short and practical.
 
@@ -220,11 +231,14 @@ After approval:
 
 ### Step 7 — Validate
 
-Run:
+Run the validation command(s) defined in the plan.
 
-```bash
-yarn validate
-```
+Choose them using this priority:
+
+1. explicit user instruction or approved plan
+2. project docs or project-local instructions
+3. repo-defined entrypoints such as `validate`, `check`, `test`, `lint`, `typecheck`, `build`
+4. obvious tool-native commands inferred from the repo if no explicit entrypoint exists
 
 If it fails:
 
@@ -243,6 +257,7 @@ If blocked:
 - describe what was already fixed
 - describe what remains unresolved
 - do not hide or ignore errors
+- if no reliable validation path exists, say that explicitly and report any lighter checks that were run instead
 
 ---
 
@@ -256,7 +271,7 @@ Provide a short summary:
 
 **Validation:**
 
-- result of `yarn validate` (passed / failed with explanation)
+- exact validation command(s) run and the result of each (passed / failed / blocked with explanation)
 
 **Please check in browser:**
 
