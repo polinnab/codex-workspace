@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+# Saved session handoffs live only under .codex/context.
+# Keep this helper aligned with the session-handoff skill docs.
+
 TASK_NAME="${1:-}"
 SOURCE_FILE="${2:-}"
 

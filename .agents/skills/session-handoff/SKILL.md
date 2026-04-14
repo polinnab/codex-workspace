@@ -15,7 +15,9 @@ Save handoffs to:
 
 `.codex/context/<task-name>.md`
 
-The bundled helper script at `scripts/save-context.sh` can copy a prepared Markdown file into that location.
+The bundled helper script at `.agents/skills/session-handoff/scripts/save-context.sh` can copy a prepared Markdown file into that location.
+
+`.codex/context/` is the only supported handoff location. Do not create or reuse parallel paths such as `context/<repo>/`.
 
 ## Rules
 

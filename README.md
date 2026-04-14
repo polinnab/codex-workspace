@@ -134,6 +134,8 @@ In practice, the best long-term solution is to capture the real validation flow 
 
 ## Project-Local Codex Artifacts
 
+Use `.codex/` as the single local artifact root for this workspace and for synced project repos.
+
 When the toolkit is synced into a project, it may create project-local working artifacts under `.codex/`.
 
 - `.codex/plans/`  
@@ -162,6 +164,31 @@ Typical sequence for an existing onboarded repo:
 1. sync the toolkit if needed
 2. read the project's `AGENTS.md`
 3. choose the workflow that fits the task
+
+## Using Session Handoff
+
+Use `session-handoff` when you want to stop work and preserve enough state to continue later without rebuilding context from scratch.
+
+Normal flow:
+
+1. ask Codex to use `session-handoff`
+2. let Codex draft the handoff summary
+3. review the draft shown in chat
+4. approve saving it into `.codex/context/<task-name>.md`
+
+If you need to save a prepared Markdown file manually, use the bundled helper from the repo root:
+
+```bash
+./.agents/skills/session-handoff/scripts/save-context.sh <task-name> <source-markdown-file>
+```
+
+Example:
+
+```bash
+./.agents/skills/session-handoff/scripts/save-context.sh fix-auth-redirect /tmp/fix-auth-redirect.md
+```
+
+This creates or replaces `.codex/context/<task-name>.md`.
 
 ## Design Rule
 

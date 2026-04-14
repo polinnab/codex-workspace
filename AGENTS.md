@@ -17,13 +17,15 @@ It is not a global Codex installation and should not contain machine-wide config
 
 ## Local Codex Artifacts
 
+Use `.codex/` as the single local artifact root for both this workspace and any synced project repo.
+
 When the toolkit is synced into a project, it may create project-local working artifacts under `.codex/`.
 
 - `.codex/plans/` — approved implementation plans saved for a future `feature-workflow` or `request-workflow` session
 - `.codex/context/` — saved session handoff context for later continuation
 - `.codex/notes/` — local task notes used while work is in progress
 
-These artifacts are wrapper-managed local workspace files. They should be ignored by git in both the wrapper and synced project repos unless a project explicitly chooses a different policy.
+These artifacts are wrapper-managed local workspace files. Do not create parallel artifact trees such as `context/` for saved handoffs. These paths should be ignored by git in both the wrapper and synced project repos unless a project explicitly chooses a different policy.
 
 ## Working rules
 
