@@ -38,13 +38,7 @@ For every new feature, bugfix, or implementation request, follow this workflow e
   - validation plan
   - risks / assumptions
 
-- The validation plan must define the command(s) to run after implementation.
-- Use this discovery order:
-  - explicit user instruction or approved saved plan
-  - project `AGENTS.md`, `README`, or project docs
-  - repo-defined entrypoints such as `validate`, `check`, `test`, `lint`, `typecheck`, `build`
-  - clear tool-native commands inferred from the repo if no explicit entrypoint exists
-- Prefer the smallest relevant validation set that gives confidence for the changed scope.
+- The validation plan must follow `.agents/shared/validation-policy.md`.
 
 - After presenting the plan, explicitly ask for approval.
 - Do not start implementation until the user approves the plan.
@@ -116,12 +110,10 @@ Task note template:
 
 ### 6. Validation (MANDATORY)
 
-- After implementation, run the validation command(s) defined in the approved plan.
-- Prefer project entrypoints over framework guesses.
+- After implementation, run the validation command(s) defined in the approved plan and follow `.agents/shared/validation-policy.md`.
 - If validation fails, fix the issues and run validation again.
 - Repeat until validation passes or until blocked by an external issue that cannot be resolved within the task.
 - If validation fails because of pre-existing or unrelated repository issues, stop and report them first before continuing.
-- If no reliable validation path exists, state that explicitly and report any lighter relevant checks that were run instead.
 - If blocked, clearly explain the blocker and what remains unresolved.
 
 ### 7. Handoff for Human Review

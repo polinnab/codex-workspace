@@ -11,6 +11,8 @@ It is not a global Codex installation and should not contain machine-wide config
 ## Structure
 
 - `.agents/skills/` — reusable repo-local workflow skills
+- `.agents/shared/` — shared workflow guidance synced into project repos when required by skills
+- `.agents/templates/` — wrapper-only templates used to generate project-local files
 - `projects/` — local sample apps or real project repositories worked on inside this workspace
 
 ## Local Codex Artifacts
@@ -26,15 +28,13 @@ These artifacts are wrapper-managed local workspace files. They should be ignore
 ## Working rules
 
 - Before doing task-specific work, choose and follow the appropriate workflow skill:
+  - `project-onboarding` for bringing a new repo into `projects/`, syncing the toolkit, and establishing project-local `AGENTS.md`
+  - `investigation-workflow` for analysis, clarification, options, and an implementation handoff before coding
   - `feature-workflow`
-  - `bugfix-workflow`
   - `request-workflow`
+  - `session-handoff` for saving local task context for later continuation
   - `workspace-evolution` for improving this wrapper workspace itself
-- Keep validation in delivery workflows, but keep it repo-native:
-  - prefer explicit project validation commands from user instructions, project `AGENTS.md`, README, or docs
-  - otherwise prefer repo entrypoints like `validate`, `check`, `test`, `lint`, `typecheck`, or `build`
-  - only infer tool-native commands when the repo does not define an explicit validation path
-  - run the smallest relevant validation set for the changed scope and report the exact commands used
+- Keep validation in delivery workflows, but keep it repo-native by following `.agents/shared/validation-policy.md`.
 - Keep wrapper-level instructions generic and reusable.
 - Keep project-specific commands, architecture rules, and conventions inside each real project, not in this wrapper.
 

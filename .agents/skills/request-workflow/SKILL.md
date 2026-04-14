@@ -83,17 +83,7 @@ When no context file path is provided, work directly from the prompt.
    Do not start implementation until the user approves the plan.
 
 7. **During planning define the validation approach**
-   The plan must name the validation command(s) to run after implementation.
-   Use this discovery order:
-
-   ```text
-   1. User instruction or approved saved plan
-   2. Project AGENTS.md, README, or project docs
-   3. Repo-defined entrypoints such as validate, check, test, lint, typecheck, build
-   4. Clear tool-native commands inferred from the repo when no explicit entrypoint exists
-   ```
-
-   Prefer the smallest relevant validation set for the changed scope.
+   Follow `.agents/shared/validation-policy.md`.
 
 8. **After implementation always run validation**
    Run the planned validation command(s).
@@ -231,14 +221,7 @@ After approval:
 
 ### Step 7 — Validate
 
-Run the validation command(s) defined in the plan.
-
-Choose them using this priority:
-
-1. explicit user instruction or approved plan
-2. project docs or project-local instructions
-3. repo-defined entrypoints such as `validate`, `check`, `test`, `lint`, `typecheck`, `build`
-4. obvious tool-native commands inferred from the repo if no explicit entrypoint exists
+Run the validation command(s) defined in the plan and follow `.agents/shared/validation-policy.md`.
 
 If it fails:
 
@@ -257,7 +240,6 @@ If blocked:
 - describe what was already fixed
 - describe what remains unresolved
 - do not hide or ignore errors
-- if no reliable validation path exists, say that explicitly and report any lighter checks that were run instead
 
 ---
 

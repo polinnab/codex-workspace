@@ -20,6 +20,7 @@ echo "Syncing Codex toolkit into: $TARGET_DIR"
 
 # Ensure dirs exist
 mkdir -p "$TARGET_DIR/.agents/skills"
+mkdir -p "$TARGET_DIR/.agents/shared"
 mkdir -p "$TARGET_DIR/.codex/agents"
 mkdir -p "$TARGET_DIR/.codex/plans"
 mkdir -p "$TARGET_DIR/.codex/context"
@@ -29,7 +30,12 @@ mkdir -p "$TARGET_DIR/.codex/notes"
 # Keep wrapper-only skills in codex-workspace and out of synced app repos.
 rsync -av --delete \
   --exclude 'workspace-evolution/' \
+  --exclude 'project-onboarding/' \
   "$ROOT/.agents/skills/" "$TARGET_DIR/.agents/skills/"
+
+# --- Shared workflow assets ---
+rsync -av --delete \
+  "$ROOT/.agents/shared/" "$TARGET_DIR/.agents/shared/"
 
 # --- Project-local Codex artifacts ---
 # Keep working artifacts local to each synced app by default.
