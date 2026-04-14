@@ -152,11 +152,11 @@ collect_validation_lines() {
   fi
 
   if [ -f "$dir/package.json" ]; then
-    grep -Eq '"validate"[[:space:]]*:' "$dir/package.json" && printf '%s\n' "- package.json script candidate: %s run validate" "$package_manager"
-    grep -Eq '"check"[[:space:]]*:' "$dir/package.json" && printf '%s\n' "- package.json script candidate: %s run check" "$package_manager"
-    grep -Eq '"test"[[:space:]]*:' "$dir/package.json" && printf '%s\n' "- package.json script candidate: %s run test" "$package_manager"
-    grep -Eq '"lint"[[:space:]]*:' "$dir/package.json" && printf '%s\n' "- package.json script candidate: %s run lint" "$package_manager"
-    grep -Eq '"typecheck"[[:space:]]*:' "$dir/package.json" && printf '%s\n' "- package.json script candidate: %s run typecheck" "$package_manager"
+    grep -Eq '"validate"[[:space:]]*:' "$dir/package.json" && printf '%s run validate\n' "- package.json script candidate: $package_manager"
+    grep -Eq '"check"[[:space:]]*:' "$dir/package.json" && printf '%s run check\n' "- package.json script candidate: $package_manager"
+    grep -Eq '"test"[[:space:]]*:' "$dir/package.json" && printf '%s run test\n' "- package.json script candidate: $package_manager"
+    grep -Eq '"lint"[[:space:]]*:' "$dir/package.json" && printf '%s run lint\n' "- package.json script candidate: $package_manager"
+    grep -Eq '"typecheck"[[:space:]]*:' "$dir/package.json" && printf '%s run typecheck\n' "- package.json script candidate: $package_manager"
   fi
 
   if [ -f "$dir/composer.json" ]; then
