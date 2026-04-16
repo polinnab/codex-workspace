@@ -5,7 +5,7 @@ description: "Use when the user explicitly wants a gated delivery workflow for f
 
 # Feature Workflow
 
-Use only for larger, ambiguous, or high-risk feature work.
+Use for larger, ambiguous, or high-risk feature work.
 
 Prefer `request-workflow` unless one of these is true:
 
@@ -18,12 +18,11 @@ Prefer `request-workflow` unless one of these is true:
 
 - If the user gives `.codex/plans/<task-name>.md`, read it first and treat it as approved unless scope changed.
 - Ask only the questions needed to remove real ambiguity.
-- For non-trivial work, do not code before plan approval.
-- Keep plans short and file-oriented.
-- Re-plan if scope changes.
-- Run planned validation and follow `.agents/shared/validation-policy.md`.
-- If validation fails because of unrelated repo issues, stop and report that.
-- After user approval of the implementation, offer 2 commit messages and commit only after the user chooses one.
+- Do not code before plan approval unless the saved plan is already approved and scope is unchanged.
+- Keep plans short and file-oriented. Re-plan if scope changes.
+- Run planned validation per `.agents/shared/validation-policy.md`.
+- If validation is blocked by unrelated repo issues, stop and report that.
+- After result approval, offer a commit messages and commit only after the user approve it.
 - Never push.
 - Keep responses concise. Do not restate known context.
 
@@ -76,6 +75,6 @@ Then wait for approval.
 
 ## Output Rules
 
-- Clarification: minimal grouped questions only.
-- Plan: short, concrete, no long templates.
-- Summary: short handoff, exact validation commands, only important browser checks.
+- Keep clarification, plan, and review short.
+- Use exact validation commands.
+- Mention browser checks only if they matter.

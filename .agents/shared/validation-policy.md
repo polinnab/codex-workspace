@@ -1,15 +1,11 @@
 # Validation Policy
 
-Use this policy in delivery workflows when planning and running validation.
-
-## Goal
-
-Keep validation mandatory while staying repo-native and stack-appropriate.
+Use this in delivery workflows when planning and running validation.
 
 ## Rules
 
-1. Define a validation plan during planning.
-   The plan must name the command or commands to run after implementation and briefly explain why they fit the repo and changed scope.
+1. Define validation during planning.
+   Name the command or commands to run after implementation and why they fit the repo and changed scope.
 
 2. Choose commands using this priority order:
    1. explicit user instruction or approved saved plan
@@ -38,32 +34,3 @@ Keep validation mandatory while staying repo-native and stack-appropriate.
    - passed
    - failed
    - blocked with explanation
-
-## Examples
-
-- JavaScript or TypeScript:
-  use documented repo commands first, then package scripts such as `validate`, `check`, `test`, `lint`, `typecheck`
-
-- Python:
-  use documented repo commands first, then repo task runners or clear commands such as `pytest`, `ruff check`, `mypy`
-
-- Rust:
-  use documented repo commands first, then clear commands such as `cargo test`, `cargo clippy`, `cargo fmt --check`
-
-- Go:
-  use documented repo commands first, then clear commands such as `go test ./...`
-
-- .NET:
-  use documented repo commands first, then clear commands such as `dotnet test`
-
-- PHP:
-  use documented repo commands first, then repo task runners or clear commands such as `composer test`, `php artisan test`, `vendor/bin/phpunit`, `vendor/bin/phpstan`, `vendor/bin/pint`
-
-- Java or JVM:
-  use documented repo commands first, then clear commands such as `mvn test` or `./gradlew test`
-
-- Ruby:
-  use documented repo commands first, then clear commands such as `bundle exec rspec` or `bundle exec rubocop`
-
-- Polyglot repositories:
-  prefer shared repo entrypoints such as `make validate`, `just check`, or other documented local task runners

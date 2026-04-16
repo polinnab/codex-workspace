@@ -24,7 +24,7 @@ Use `feature-workflow` instead when the work is ambiguous, risky, or needs stric
 - If the task is clear enough, move forward.
 - Make a short plan before coding.
 - Ask for approval unless the user gave an already approved saved plan and scope is unchanged.
-- Run planned validation and follow `.agents/shared/validation-policy.md`.
+- Run planned validation per `.agents/shared/validation-policy.md`.
 - Fix validation issues when reasonable.
 - After user approval of the result, propose or use an approved commit message and commit locally.
 - Never push.
