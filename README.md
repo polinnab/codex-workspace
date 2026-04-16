@@ -81,6 +81,16 @@ The generated draft is not the final source of truth by itself. Review it, confi
 
 ## Toolkit Sync
 
+The workspace tracks one wrapper toolkit version in:
+
+`TOOLKIT_VERSION`
+
+Each synced project records the last applied toolkit version in:
+
+`projects/<app>/.codex/toolkit-version`
+
+That project-local file is wrapper-managed metadata and is ignored by git by default.
+
 Use the sync script when you need to refresh the shared Codex toolkit inside an onboarded project:
 
 ```bash
@@ -94,6 +104,44 @@ This syncs:
 - local `.codex/` working directories
 
 It intentionally does not sync wrapper-only assets such as `workspace-evolution`, `project-onboarding`, or wrapper templates.
+
+## Toolkit Upgrade Flow
+
+Use the update script when the workspace toolkit version changes and you want to check or pull that newer version into projects under `projects/`.
+
+Wrapper command:
+
+```bash
+./scripts/update-codex-toolkit.sh --check
+```
+
+This shows whether each project is:
+
+- up to date with the current workspace toolkit version
+- missing recorded toolkit metadata
+- behind the current workspace toolkit version
+
+To pull the current toolkit version into one project:
+
+```bash
+./scripts/update-codex-toolkit.sh <app-folder>
+```
+
+To pull the current toolkit version into every project in `projects/`:
+
+```bash
+./scripts/update-codex-toolkit.sh --all
+```
+
+Recommended flow after wrapper changes:
+
+1. bump `TOOLKIT_VERSION`
+2. run `./scripts/update-codex-toolkit.sh --check`
+3. run `./scripts/update-codex-toolkit.sh <app-folder>` or `--all`
+4. review any sync conflicts where a project kept a local version
+5. rerun `--check` to confirm every target project is current
+
+This keeps wrapper evolution explicit: the workspace owns the current toolkit version, and each project records which version it has already pulled.
 
 ## Workflow Skills
 

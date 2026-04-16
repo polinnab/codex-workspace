@@ -24,6 +24,7 @@ When the toolkit is synced into a project, it may create project-local working a
 - `.codex/plans/` — approved implementation plans saved for a future `feature-workflow` or `request-workflow` session
 - `.codex/context/` — saved session handoff context for later continuation
 - `.codex/notes/` — local task notes used while work is in progress
+- `.codex/toolkit-version` — last wrapper toolkit version synced into a project
 
 These artifacts are wrapper-managed local workspace files. Do not create parallel artifact trees such as `context/` for saved handoffs. These paths should be ignored by git in both the wrapper and synced project repos unless a project explicitly chooses a different policy.
 

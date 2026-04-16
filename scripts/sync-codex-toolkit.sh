@@ -2,6 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+TOOLKIT_VERSION_FILE="$ROOT/TOOLKIT_VERSION"
 
 APP_NAME="${1:-}"
 if [ -z "$APP_NAME" ]; then
@@ -16,7 +17,18 @@ if [ ! -d "$TARGET_DIR" ]; then
   exit 1
 fi
 
-echo "Syncing Codex toolkit into: $TARGET_DIR"
+if [ ! -f "$TOOLKIT_VERSION_FILE" ]; then
+  echo "Error: missing toolkit version file at $TOOLKIT_VERSION_FILE"
+  exit 1
+fi
+
+TOOLKIT_VERSION="$(tr -d '[:space:]' < "$TOOLKIT_VERSION_FILE")"
+if [ -z "$TOOLKIT_VERSION" ]; then
+  echo "Error: toolkit version is empty in $TOOLKIT_VERSION_FILE"
+  exit 1
+fi
+
+echo "Syncing Codex toolkit $TOOLKIT_VERSION into: $TARGET_DIR"
 
 prompt_conflict_resolution() {
   local source_file="$1"
@@ -128,7 +140,10 @@ $IGNORE_START
 .codex/plans/
 .codex/context/
 .codex/notes/
+.codex/toolkit-version
 $IGNORE_END
 EOF
+
+printf '%s\n' "$TOOLKIT_VERSION" > "$TARGET_DIR/.codex/toolkit-version"
 
 echo "✅ Sync complete"
