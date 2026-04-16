@@ -4,9 +4,42 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TOOLKIT_VERSION_FILE="$ROOT/TOOLKIT_VERSION"
 
-APP_NAME="${1:-}"
+usage() {
+  cat <<'EOF'
+Usage:
+  ./scripts/sync-codex-toolkit.sh [--prefer-workspace] <app-folder>
+
+Behavior:
+  --prefer-workspace  Overwrite conflicting synced toolkit files with the workspace copy.
+EOF
+}
+
+PREFER_WORKSPACE=0
+APP_NAME=""
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --prefer-workspace)
+      PREFER_WORKSPACE=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      if [ -n "$APP_NAME" ]; then
+        usage
+        exit 1
+      fi
+      APP_NAME="$1"
+      shift
+      ;;
+  esac
+done
+
 if [ -z "$APP_NAME" ]; then
-  echo "Usage: ./scripts/sync-codex-toolkit.sh <app-folder>"
+  usage
   exit 1
 fi
 
@@ -28,6 +61,13 @@ if [ -z "$TOOLKIT_VERSION" ]; then
   exit 1
 fi
 
+HAS_CONFLICT_TTY=0
+if [ "$PREFER_WORKSPACE" -eq 0 ]; then
+  if { exec 3</dev/tty; } 2>/dev/null; then
+    HAS_CONFLICT_TTY=1
+  fi
+fi
+
 echo "Syncing Codex toolkit $TOOLKIT_VERSION into: $TARGET_DIR"
 
 prompt_conflict_resolution() {
@@ -36,12 +76,24 @@ prompt_conflict_resolution() {
   local relative_path="$3"
   local choice
 
+  if [ "$PREFER_WORKSPACE" -eq 1 ]; then
+    cp -f "$source_file" "$target_file"
+    echo "Kept workspace version for $relative_path"
+    return 0
+  fi
+
+  if [ "$HAS_CONFLICT_TTY" -ne 1 ]; then
+    echo "Conflict detected for $relative_path, but no interactive terminal is available."
+    echo "Re-run with --prefer-workspace to overwrite synced toolkit files automatically."
+    exit 1
+  fi
+
   while true; do
     printf '\nConflict: %s\n' "$relative_path"
     printf '  workspace: %s\n' "$source_file"
     printf '  project:   %s\n' "$target_file"
     printf 'Choose which file to keep [w=workspace, p=project]: '
-    read -r choice
+    read -r choice <&3
 
     case "$choice" in
       w|W)

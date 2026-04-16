@@ -97,6 +97,12 @@ Use the sync script when you need to refresh the shared Codex toolkit inside an 
 ./scripts/sync-codex-toolkit.sh <app-folder>
 ```
 
+If you want synced toolkit files to be overwritten by the current workspace copy without interactive conflict prompts:
+
+```bash
+./scripts/sync-codex-toolkit.sh --prefer-workspace <app-folder>
+```
+
 This syncs:
 
 - project-safe workflow skills
@@ -133,13 +139,21 @@ To pull the current toolkit version into every project in `projects/`:
 ./scripts/update-codex-toolkit.sh --all
 ```
 
+To upgrade without interactive conflict prompts and always keep the workspace copy for synced toolkit files:
+
+```bash
+./scripts/update-codex-toolkit.sh --prefer-workspace <app-folder>
+./scripts/update-codex-toolkit.sh --prefer-workspace --all
+```
+
 Recommended flow after wrapper changes:
 
 1. bump `TOOLKIT_VERSION`
 2. run `./scripts/update-codex-toolkit.sh --check`
 3. run `./scripts/update-codex-toolkit.sh <app-folder>` or `--all`
-4. review any sync conflicts where a project kept a local version
-5. rerun `--check` to confirm every target project is current
+4. if the project should adopt the wrapper copy for all synced toolkit files, use `--prefer-workspace`
+5. review any remaining sync conflicts where a project kept a local version
+6. rerun `--check` to confirm every target project is current
 
 This keeps wrapper evolution explicit: the workspace owns the current toolkit version, and each project records which version it has already pulled.
 

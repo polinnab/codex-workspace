@@ -9,13 +9,15 @@ TOOLKIT_VERSION_FILE="$ROOT/TOOLKIT_VERSION"
 usage() {
   cat <<'EOF'
 Usage:
-  ./scripts/update-codex-toolkit.sh --check
-  ./scripts/update-codex-toolkit.sh --all
-  ./scripts/update-codex-toolkit.sh <project-name>
+  ./scripts/update-codex-toolkit.sh [--prefer-workspace] --check
+  ./scripts/update-codex-toolkit.sh [--prefer-workspace] --all
+  ./scripts/update-codex-toolkit.sh [--prefer-workspace] <project-name>
 
 Behavior:
   --check        Show which projects are missing or behind the current toolkit version.
   --all          Sync the current toolkit version into every project under projects/.
+  --prefer-workspace
+                 Overwrite conflicting synced toolkit files with the workspace copy.
   <project-name> Sync the current toolkit version into one project.
 EOF
 }
@@ -71,10 +73,37 @@ print_status() {
 
 sync_project() {
   local project_name="$1"
-  "$SYNC_SCRIPT" "$project_name"
+  if [ "${PREFER_WORKSPACE:-0}" -eq 1 ]; then
+    "$SYNC_SCRIPT" --prefer-workspace "$project_name"
+  else
+    "$SYNC_SCRIPT" "$project_name"
+  fi
 }
 
-MODE="${1:-}"
+PREFER_WORKSPACE=0
+MODE=""
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --prefer-workspace)
+      PREFER_WORKSPACE=1
+      shift
+      ;;
+    -h|--help|--check|--all)
+      MODE="$1"
+      shift
+      ;;
+    *)
+      MODE="$1"
+      shift
+      ;;
+  esac
+
+  if [ -n "$MODE" ]; then
+    break
+  fi
+done
+
 case "$MODE" in
   --check)
     while IFS= read -r project_name; do
