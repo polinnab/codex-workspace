@@ -5,112 +5,51 @@ description: "Use when the user wants to preserve the current task state for a l
 
 # Session Handoff
 
-Use this skill when the user asks to save progress, create a handoff, preserve session context, or prepare a clean summary for later continuation.
+Use when the user wants a saved continuation note.
 
-The goal is to produce a concise, practical Markdown summary of the current task state and save it only after user approval.
-
-## Output Path
-
-Save handoffs to:
-
+Save only to:
 `.codex/context/<task-name>.md`
 
-The bundled helper script at `.agents/skills/session-handoff/scripts/save-context.sh` can copy a prepared Markdown file into that location.
+## Core Rules
 
-`.codex/context/` is the only supported handoff location. Do not create or reuse parallel paths such as `context/<repo>/`.
-
-## Rules
-
-- Do not implement production code as part of this skill.
-- Do not modify repository files except the target handoff file.
-- Do not save or overwrite the handoff file without explicit user approval.
+- Do not implement code as part of this skill.
+- Do not save without approval.
 - Do not guess `task-name` if it is unclear.
-- Do summarize the task state clearly and concretely.
-- Do preserve decisions, constraints, blockers, and next steps.
-- Do keep the handoff useful for a new session with minimal additional context.
-
-## Required Inputs
-
-Before saving, identify:
-
-- `task-name`
-
-If it is missing or ambiguous, ask the user before offering to save.
-
-Guidance:
-
-- `task-name`: short kebab-case identifier such as `fix-auth-redirect` or `investigate-build-failure`
+- Keep the handoff short, factual, and actionable.
+- Preserve decisions, blockers, and next step.
 
 ## Workflow
 
-### 1. Identify Scope
-
-Determine:
+1. Identify
 
 - task name
-- current stage
+- stage
 
-Suggested stage values:
+2. Draft
 
-- investigation
-- planned
-- in progress
-- partially implemented
-- blocked
-- ready for validation
-- completed
-
-### 2. Analyze Current Session
-
-Extract the minimum useful state:
+Include only the useful minimum:
 
 - goal
 - current status
-- work completed
-- important decisions
+- work done
+- decisions
 - constraints
 - risks or blockers
 - open questions
 - next recommended step
 
-Do not include conversational filler.
+3. Show and ask
 
-### 3. Draft The Handoff
-
-Prepare the summary in the required Markdown structure below.
-
-Writing guidelines:
-
-- prefer short sections and bullets
-- keep facts specific and actionable
-- preserve important domain terminology
-- summarize reality, not guesses
-- avoid repeating the same detail across sections
-
-### 4. Show Before Saving
-
-Show the full draft to the user before writing any file.
-
-Then ask exactly:
-
+Show the full draft, then ask exactly:
 `Save this handoff into .codex/context/<task-name>.md?`
 
-### 5. Save Only After Approval
+4. Save only after approval
 
-If the user says yes:
-
-- create or replace `.codex/context/<task-name>.md`
-- save the prepared Markdown
-- confirm the saved path
-
-If the user says no:
-
-- reply only with `OK`
-- do not create or modify any file
+- If yes, create or replace the file and confirm the path.
+- If no, reply only:
+`OK`
 
 ## Required Markdown Structure
-
-Use this structure exactly:
 
 ```md
 # Task Context: <short title>
@@ -125,73 +64,41 @@ Use this structure exactly:
 
 ## Stage
 
-<investigation / planned / in progress / blocked / completed / etc.>
+<stage>
 
 ## Goal
 
-<clear description of the task goal>
+<task goal>
 
 ## Current Status
 
-<short summary of the current state>
+<current state>
 
 ## What Was Done
 
-- <completed action>
-- <completed action>
+- <item>
 
 ## Decisions
 
-- <decision>
-- <decision>
+- <item>
 
 ## Constraints
 
-- <constraint>
-- <constraint>
+- <item>
 
 ## Risks / Blockers
 
-- <risk or blocker>
-- <risk or blocker>
+- <item>
 
 ## Open Questions
 
-- <open question>
-- <open question>
+- <item>
 
 ## Next Recommended Step
 
-<clear next action for the next session or next agent>
+<next action>
 
 ## Notes
 
-- <optional extra context worth preserving>
+- <optional extra context>
 ```
-
-## File Behavior
-
-When saving:
-
-- create the target file if it does not exist
-- replace the target file with the latest trusted summary if it already exists
-- do not append duplicate handoff content
-- do not create additional files unless the user explicitly asks
-
-## Exit Criteria
-
-This skill is complete only when:
-
-- the current session has been summarized
-- the draft was shown to the user
-- the user was asked whether to save it
-- the handoff file was written only if approved
-- the final saved path was confirmed
-
-## Anti-Patterns
-
-- saving without approval
-- guessing task identity
-- producing vague summaries with no next step
-- mixing handoff work with unrelated implementation
-- appending raw duplicate summaries to an existing handoff file

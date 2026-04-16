@@ -115,6 +115,25 @@ It intentionally does not sync wrapper-only assets such as `workspace-evolution`
 - `workspace-evolution`  
   Improve this wrapper itself: scripts, skills, sync behavior, and reusable conventions.
 
+## Differences between `feature-workflow` and `request-workflow`
+
+Use `request-workflow` for:
+
+- small feature
+- medium feature with clear scope
+- refactor in known area
+- UI update
+- task continuation from saved context
+- straightforward bugfix
+
+Use `feature-workflow` for:
+
+- ambiguous feature
+- multi-step feature with risky behavior changes
+- work involving architecture choices
+- anything where wrong assumptions would be expensive
+- large implementation you want tightly gated
+
 ## Validation Philosophy
 
 Validation stays mandatory, but it must be repo-native.

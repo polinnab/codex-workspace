@@ -5,282 +5,78 @@ description: Use this skill for general development requests, small feature work
 
 # Request Workflow
 
-## Purpose
+Default delivery workflow for most implementation tasks.
 
-This skill is the default workflow for handling a general implementation request in a coding project.
+Use it for:
 
-It supports two starting points:
+- small or medium features
+- refactors in a known area
+- UI updates
+- straightforward bug fixes
+- continuation from `.codex/context/*.md` or `.codex/plans/*.md`
 
-1. **Fresh request**  
-   The user describes what they want in the current prompt.
+Use `feature-workflow` instead when the work is ambiguous, risky, or needs strict gates.
 
-2. **Saved artifact continuation**  
-   The user provides a relative path to a markdown file with saved context or an approved plan from a previous session.  
-   The agent must read that file first, analyze it, and use it as the starting context for the task.
+## Core Rules
 
-The workflow ensures the agent:
-
-- understands the request before coding
-- asks follow-up questions only when needed
-- creates a short implementation plan before implementation
-- gets user approval before coding
-- defines a stack-appropriate validation plan
-- validates the result with the best repo-native command(s) available
-- fixes validation issues if possible
-- finishes with a short handoff for browser testing
-- proposes or uses an approved commit message
-- commits locally only
-- **never pushes**
-
----
-
-## Inputs
-
-The user may provide one of these:
-
-### A. Saved artifact path
-
-A relative path to a markdown file, for example:
-
-`.codex/context/some-task.md`
-
-or
-
-`.codex/plans/some-task.md`
-
-When such a path is provided, you must:
-
-1. read the file
-2. extract the goal, prior decisions, constraints, unfinished work, and known risks
-3. continue from that context without asking the user to restate already-known information
-
-### B. Fresh request
-
-A normal implementation request in the prompt.
-
-When no context file path is provided, work directly from the prompt.
-
----
-
-## Core Behavior Rules
-
-1. **Understand first, code second**
-   Do not jump into implementation until the task is understood well enough.
-
-2. **Use saved context when provided**
-   If the user provided a relative path to saved context or a saved approved plan, read it before planning or asking questions.
-
-3. **Ask questions only if needed**
-   Ask follow-up questions only when missing information would likely cause wrong implementation, rework, or risky assumptions.
-
-4. **Prefer moving forward**
-   If the task is clear enough, do not block on extra questions. Go directly to a short implementation plan.
-
-5. **Always create a short implementation plan before coding**
-   The plan must be concise and practical.
-
-6. **Always ask for approval before implementation**
-   Do not start implementation until the user approves the plan.
-
-7. **During planning define the validation approach**
-   Follow `.agents/shared/validation-policy.md`.
-
-8. **After implementation always run validation**
-   Run the planned validation command(s).
-
-9. Fix validation issues when possible
-   If validation fails, analyze errors and fix them before finishing, when reasonably possible.
-
-10. Finish with a short final handoff
-   Keep it brief and practical:
-
-- what was done
-- what the user should check in browser
-
-11. Commit only after user approval
-    If the user confirms everything is good:
-
-- propose a commit message, or
-- ask for the user’s preferred message
-- once the message is approved, create the local git commit
-
-12. Never push
-    Do not push to remote under any circumstances.
+- If the user provides a saved context or plan path, read it first.
+- Ask questions only when needed to avoid wrong assumptions.
+- If the task is clear enough, move forward.
+- Make a short plan before coding.
+- Ask for approval unless the user gave an already approved saved plan and scope is unchanged.
+- Run planned validation and follow `.agents/shared/validation-policy.md`.
+- Fix validation issues when reasonable.
+- After user approval of the result, propose or use an approved commit message and commit locally.
+- Never push.
+- Keep responses concise. Do not repeat context unless it changed.
 
 ## Workflow
 
-### Step 1 — Determine the starting source
+1. Start from the right source
 
-Check whether the user provided:
+- Fresh prompt: use the prompt.
+- Saved context: read it and reuse prior decisions.
+- Saved approved plan: read it and treat it as approved unless scope changed.
 
-- a saved context file path
-- a saved approved plan path
-- a fresh request
-- both
+2. Clarify only if needed
 
-If a saved context file path is present:
+- Ask minimal grouped questions only when missing information is important.
+- Otherwise continue.
 
-- read the file first
-- treat it as the main source of truth unless the user overrides something
+3. Plan
 
-If a saved approved plan path is present:
+Provide a short plan with:
 
-- read the file first
-- treat it as approved implementation direction unless the user overrides scope
-- if the user changes scope materially, return to planning and ask for approval again
-
-If both are present:
-
-- combine the saved artifact with current prompt updates
-
----
-
-### Step 2 — Analyze the task
-
-Understand:
-
-- current goal
-- what was already done (if context exists)
-- constraints and decisions
-- missing information
-- affected areas/files
-
-If using a saved artifact, identify:
-
-- completed vs unfinished work
-- prior decisions that must be respected
-
----
-
-### Step 3 — Decide if questions are needed
-
-Ask questions **only if necessary**.
-
-Ask if:
-
-- requirements are unclear
-- multiple valid approaches exist
-- risk of wrong assumptions
-- context is outdated or conflicting
-
-Do NOT ask if:
-
-- task is clear enough
-- reasonable assumptions can be made
-
-If questions are needed:
-
-- ask minimal, grouped questions
-- wait for answers before continuing
-
-If not:
-
-- proceed to planning
-
----
-
-### Step 4 — Provide a short implementation plan
-
-Create a concise plan including:
-
-- what will be changed
-- key areas/files involved
-- any important behavior changes
-- validation plan with the command(s) to run and why they fit the repo
-
-Keep it short and practical.
+- what will change
+- key files or areas
+- validation command(s)
+- notable assumptions
 
 End with:
-**Approve this plan?**
+`Approve this plan?`
 
-Skip this approval step only when the starting input is an explicitly approved saved plan and the user has not changed scope.
+Skip this approval only for an explicitly approved saved plan with unchanged scope.
 
----
+4. Implement
 
-### Step 5 — Wait for approval
+- Follow existing patterns.
+- Avoid unrelated refactors.
 
-Do NOT implement before approval.
+5. Validate
 
-If user requests changes:
+- Run the planned validation.
+- Fix issues when reasonable and rerun.
+- If blocked, report the blocker clearly.
 
-- update the plan
-- ask for approval again
+6. Review
 
----
+Summarize briefly:
 
-### Step 6 — Implement
+- what changed
+- validation command(s) and result
+- what the user should verify
 
-After approval:
+7. Commit
 
-- implement changes
-- follow existing code patterns
-- avoid unrelated refactoring
-- respect prior decisions from context
-
----
-
-### Step 7 — Validate
-
-Run the validation command(s) defined in the plan and follow `.agents/shared/validation-policy.md`.
-
-If it fails:
-
-- analyze errors
-- fix issues if possible
-- rerun validation
-
-Repeat until:
-
-- validation passes, or
-- a blocker is reached that cannot be safely resolved
-
-If blocked:
-
-- clearly explain what failed
-- describe what was already fixed
-- describe what remains unresolved
-- do not hide or ignore errors
-
----
-
-### Step 8 — Final short handoff
-
-Provide a short summary:
-
-**Done:**
-
-- what was implemented
-
-**Validation:**
-
-- exact validation command(s) run and the result of each (passed / failed / blocked with explanation)
-
-**Please check in browser:**
-
-- key things to verify
-- main flows or UI parts affected
-
-Keep it concise and practical.
-
----
-
-### Step 9 — Commit flow
-
-After the user reviews and confirms everything is OK:
-
-- if no commit message provided:
-  - propose a short, clear commit message
-
-- if user wants their own message:
-  - ask for it and wait
-
-- wait for approval of the commit message
-
-After approval:
-
-```bash
-git add <relevant files>
-git commit -m "approved message"
-```
-
-### Step 10 — Never push
+- After user approval, propose a commit message or ask for theirs.
+- Commit locally only after the message is approved.
