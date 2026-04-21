@@ -1,0 +1,4 @@
+interface:
+  display_name: "Branch Reviewer"
+  short_description: "Review a branch diff against a base branch"
+  default_prompt: "Use $branch-reviewer to review a feature or bugfix branch against a base branch, summarize what changed, and produce a concise report with concrete problems, risks, assumptions, and manual test checks."
