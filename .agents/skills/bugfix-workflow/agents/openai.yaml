@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bugfix Workflow"
+  short_description: "Diagnose a bug, gate the fix, then implement"
+  default_prompt: "Use $bugfix-workflow to inspect the reported issue, identify the root cause, propose a short fix plan, ask for approval, and only then implement and validate the fix."
