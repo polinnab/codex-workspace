@@ -176,24 +176,76 @@ sync_tree_preserving_local_files "$ROOT/.agents/shared" "$TARGET_DIR/.agents/sha
 GITIGNORE_FILE="$TARGET_DIR/.gitignore"
 IGNORE_START="# codex-workspace local artifacts"
 IGNORE_END="# /codex-workspace local artifacts"
+IGNORE_AGENTS=".agents"
+IGNORE_CODEX=".codex"
 
 if [ -f "$GITIGNORE_FILE" ]; then
   TMP_FILE="$(mktemp)"
-  awk -v start="$IGNORE_START" -v end="$IGNORE_END" '
-    $0 == start { in_block = 1; next }
-    $0 == end { in_block = 0; next }
-    !in_block { print }
+  awk -v start="$IGNORE_START" -v end="$IGNORE_END" -v agents="$IGNORE_AGENTS" -v codex="$IGNORE_CODEX" '
+    function flush_buffer(    i) {
+      for (i = 1; i <= buffer_count; i++) {
+        print buffer[i]
+      }
+      buffer_count = 0
+    }
+
+    {
+      if ($0 != start) {
+        print
+        next
+      }
+
+      buffer_count = 0
+      buffer[++buffer_count] = $0
+
+      if ((getline line1) <= 0) {
+        flush_buffer()
+        exit
+      }
+
+      buffer[++buffer_count] = line1
+
+      if (line1 == agents) {
+        if ((getline line2) <= 0) {
+          flush_buffer()
+          exit
+        }
+
+        buffer[++buffer_count] = line2
+
+        if (line2 == codex) {
+          buffer_count = 0
+          next
+        }
+
+        flush_buffer()
+        next
+      }
+
+      while ((getline line) > 0) {
+        if (line == end) {
+          buffer_count = 0
+          next
+        }
+
+        buffer[++buffer_count] = line
+      }
+
+      flush_buffer()
+      exit
+    }
   ' "$GITIGNORE_FILE" > "$TMP_FILE"
   mv "$TMP_FILE" "$GITIGNORE_FILE"
 fi
 
+if [ -f "$GITIGNORE_FILE" ] && [ -s "$GITIGNORE_FILE" ] && [ -n "$(tail -c 1 "$GITIGNORE_FILE")" ]; then
+  printf '\n' >> "$GITIGNORE_FILE"
+fi
+
 cat >> "$GITIGNORE_FILE" <<EOF
 $IGNORE_START
-.codex/plans/
-.codex/context/
-.codex/notes/
-.codex/toolkit-version
-$IGNORE_END
+$IGNORE_AGENTS
+$IGNORE_CODEX
 EOF
 
 printf '%s\n' "$TOOLKIT_VERSION" > "$TARGET_DIR/.codex/toolkit-version"
